@@ -1,0 +1,2 @@
+ServletManejarOpcionesUsuario=javax.servlet.annotation.WebServlet
+ServletManejoRegistro=javax.servlet.annotation.WebServlet
