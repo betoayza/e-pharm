@@ -16,25 +16,27 @@
         <div style= "background-color: silver; width: 600px; height: 150px; margin: 25% auto; border-radius: 20px; border-style: double;">
             <h1 style="color: blanchedalmond; text-align: center;">Productos Disponibles:</h1>
             <%
-            /*Inicializar variables */
+                //Unicamente en este JSP  se genera la conexion a BD y se muestra el resultado (no uso Servlet por practicidad)
+                 /*Inicializar variables */
                 String mensajeResultado = "Base de datos actualizada...";
                 String urlDB = "jdbc:mysql://localhost:3306/farmaciaOnline?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
                 String usuarioDB = "root";
                 String psswdDB = "";
                 String driverDB = "com.mysql.cj.jdbc.Driver";
 
-                /* Paso4) Conexión a la base de datos */
+                /* Conexión a la base de datos */
                 Connection conexionDB = null;
 
                 //Intentar conectar a BD y ejecutar las operaciones
                 try {
                     Class.forName(driverDB);
                     conexionDB = DriverManager.getConnection(urlDB, usuarioDB, psswdDB);
+                    
                     PreparedStatement prprdStmnt = conexionDB.prepareStatement("SELECT id_producto, nombre FROM productos");
                     ResultSet rs = null;
-                    rs = prprdStmnt.executeQuery();
-                    //rs.beforeFirst();
-                    %>
+                    rs = prprdStmnt.executeQuery();                    
+                    
+            %>
                         <form action="paginaMostrarProducto.jsp" method="POST" style="margin-left: 25%;">            
                             <select name="productoBuscado">
                                 <% while(rs.next()){ %>
@@ -44,9 +46,9 @@
                         <input type="submit" value="Ver Producto"/>
                     </form>
                     
-                    <%
+            <%
 
-
+                //Captura de errores
                 } catch (ClassNotFoundException e) {
                     mensajeResultado = " Error creando el driver!";
                     mensajeResultado += " <br/>" + e.toString();

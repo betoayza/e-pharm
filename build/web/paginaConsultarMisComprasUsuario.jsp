@@ -28,6 +28,7 @@
                 <%  
                     while (rs.next()) {
                 %>     
+                <!-- setear los atributos de pagina con cada columna del rs -->
                 <tr>                    
                     <td><%  pageContext.setAttribute("nombreProducto", rs.getString(1)); %> ${pageContext.getAttribute("nombreProducto")}</td> 
                     <td><%  pageContext.setAttribute("montoProducto", rs.getFloat(2)); %> ${pageContext.getAttribute("montoProducto")}</td> 

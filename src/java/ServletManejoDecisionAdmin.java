@@ -28,31 +28,34 @@ public class ServletManejoDecisionAdmin extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String eleccionAdmin = request.getParameter("accion"); 
-        try (PrintWriter out = response.getWriter()) {                          
             
-            //cada case corresponde al 'value de cada Option de los Selects'
-            switch (eleccionAdmin) {
-                case ("agregar"):  //ALTAS & BAJAS 
-                    response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaAltaProducto.jsp");
-                    break;
-                case ("Eliminar"): //Se elimina por ID producto
-                    response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaBajaProducto.jsp");
-                    break;
-                case ("Modificar"):
-                    response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaModificarProducto.jsp");
-                    break;
-                case ("ConsultarTablaProductos"):
-                    response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaConsultaTablaProductosAdmin.jsp");
-                    break;
-                case ("ConsultarTablaVentas"):
-                    response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaConsultarTablaVentas.jsp");
-                    break;
-                case ("ConsultarTablaUsuarios"):
-                    response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaConsultarTablaUsuarios.jsp");
-                    break;
-            }           
+            response.setContentType("text/html;charset=UTF-8");
+            
+            String eleccionAdmin = request.getParameter("accion"); 
+            
+            try (PrintWriter out = response.getWriter()) {                          
+            
+                //Se switchea el parametro 
+                switch (eleccionAdmin) {
+                    case ("agregar"):  //ALTAS & BAJAS 
+                        response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaAltaProducto.jsp");
+                        break;
+                    case ("Eliminar"): //Se elimina por ID producto
+                        response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaBajaProducto.jsp");
+                        break;
+                    case ("Modificar"):
+                        response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaModificarProducto.jsp");
+                        break;
+                    case ("ConsultarTablaProductos"):
+                        response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaConsultaTablaProductosAdmin.jsp");
+                        break;
+                    case ("ConsultarTablaVentas"):
+                        response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaConsultarTablaVentas.jsp");
+                        break;
+                    case ("ConsultarTablaUsuarios"):
+                        response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaConsultarTablaUsuarios.jsp");
+                        break;
+                }           
         }
     }
 

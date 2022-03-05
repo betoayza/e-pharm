@@ -57,12 +57,13 @@
                     PreparedStatement stmnt = conexionDB.prepareStatement("SELECT nombre, categoria, precio, imagen FROM productos WHERE id_producto = ?");
                     stmnt.setInt(1, Integer.parseInt(idProductoBuscado));
                     ResultSet rs = stmnt.executeQuery();                    
+                    //Si hay coincidencia
                     if (rs.next()) {
                         pageContext.setAttribute("nombreProducto",rs.getString(1));
                         pageContext.setAttribute("categoriaProducto",rs.getString(2));
                         pageContext.setAttribute("precioProducto",rs.getInt(3));                        
                         pageContext.setAttribute("idProducto",idProductoBuscado);                    
-                        %>
+            %>
                         <h1 style="text-align: center;">Articulo a comprar:</h1>                       
                         <form method="POST" action="ServletManejoCompra2">                            
                             <table class="table table-striped" style="border-style: double;  border-radius: 20px; color: forestgreen;">                
@@ -99,7 +100,7 @@
             %>
                     <h2>Por el momento no hay productos disponibles :( ... disculpe las molestias </h2>
                     <meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaConsultaProducto.jsp'>
-                    <p> Espere por favor, será redireccionado en 5 segundos a busqueda nueva...</p>
+                    <p> Espere por favor, será redireccionado en 5 segundos...</p>
             <%
                  }
                     //cerrar flujos 

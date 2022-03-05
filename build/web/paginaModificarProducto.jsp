@@ -20,19 +20,19 @@
                         <td>ID (producto a modificar):</td><td><input name="id_producto"/></td>    
                     </tr>
                     <tr>
-                        <td>Nombre:</td><td><input name="nombreNuevo"/></td>    
+                        <td>Nuevo nombre:</td><td><input name="nombreNuevo"/></td>    
                     </tr>
                     <tr>
-                        <td>Categoria:</td><td><input name="categoriaNueva"/></td>
+                        <td>Nueva categoria:</td><td><input name="categoriaNueva"/></td>
                     </tr>
                     <tr>
-                        <td>Stock:</td><td><input name="stockNuevo"/></td>    
+                        <td>Nuevo stock:</td><td><input name="stockNuevo"/></td>    
                     </tr>
                     <tr>
-                        <td>Precio:</td><td><input name="precioNuevo"/></td>
+                        <td>Nuevo precio:</td><td><input name="precioNuevo"/></td>
                     </tr>
                     <tr>
-                        <td>Imagen:</td><td><input name="archivoImagenNueva" id="archivo" type="file"/></td>    
+                        <td>Nueva Imagen:</td><td><input name="archivoImagenNueva" id="archivo" type="file"/></td>    
                     </tr>
                     <tr>
                         <td><input type="hidden" name="checador2" value="formularioEnviado"/></td>
@@ -40,35 +40,12 @@
                     <tr>
                         <td><input type="hidden" name="accion" value="modificar"/></td>
                     </tr>
-                </table>
-                <div id="contenedor"></div>
+                </table>                
                 <input type="submit" value="Enviar">
             </form>
             <br>
             <a href = "/AplicacionWebFarmaciaAyza/paginaAdmin.jsp"><button>Volver</button></a>
             <a href = "/AplicacionWebFarmaciaAyza/redirect.jsp"><button>Cerrar Sesion</button></a>
-        </div>      
-        
-        <script type="text/javascript">
-            //En base a la columna seleccionada
-            //1) Abrir un cuadro de texto
-            //ó
-            //2) Abrir una ventana para seleccionar la imagen
-            
-            function realizarAccion(opcion){
-                console.log("Realizando accion",opcion.value);
-                valueOpcion = document.getElementById("columna").value=opcion.value;
-                //Si se eligio "imagen", abrir ventana para subir la imagen
-                if(valueOpcion===4){               
-                    var container = document.getElementById('container');
-                    container.innerHTML = '<b><input type="file" id="filechooser" name="nueva_imagen"> </b>';
-                }                  
-                //Caso contrario, abrir una caja de texto html para cambiar columna
-                else{                      
-                    var container = document.getElementById('container');
-                    container.innerHTML = '<b><input type="text" name="nueva_info"></b>';
-                }
-            }
-</script>
+        </div>            
     </body>
 </html>

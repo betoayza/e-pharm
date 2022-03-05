@@ -31,11 +31,12 @@ public class ServletManejoLogueoUsuario2 extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+        
+            response.setContentType("text/html;charset=UTF-8");
             
-            //out.println("<h1>Servlet ServletManejoLogueoUsuario2 at " + request.getContextPath() + "</h1>");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */            
+           
             /*Inicializar variables */
             String urlDB = "jdbc:mysql://localhost:3306/farmaciaOnline?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
             String usuarioDB = "root";
@@ -59,39 +60,41 @@ public class ServletManejoLogueoUsuario2 extends HttpServlet {
                 stmnt.setString(1, usuario);
                 stmnt.setString(2, contrasenia);
                 ResultSet rs = stmnt.executeQuery();
-                //Si Result Set tiene algo signfica que ya existe un usuario con ese apodo, por lo tanto se redirige a otra JSP que indique un alta erronea con el mensaje correspondiente
+                
+                //Si encuentra algun usuario
                 if (rs.next()) {           
-                    HttpSession session = request.getSession(true);
-                    session.setAttribute("nombreUsuario", usuario);
-                    //SI ES ADMIN REDIRIGIR A JSP MANEJOTABLAADMIN
-                    if (rs.getString(1).equals("admin") && rs.getString(2).equals("1234")){
-                            out.println("<!DOCTYPE html>");
-                            out.println("<html>");
-                            out.println("<head>");                       
-                            out.println("</head>");
-                            out.println("<body style=\"background-image:url('imgs/fondo_generico.jpg'); background-position: center;\">"); 
-                            out.println("<div style=\"margin-left: 25%; margin-top: 25%; margin-right: 25%; border-style: double; border-radius: 20px\" >");
-                            //out.println("Logueo exitoso!...");
-                            out.println("<h1 style=\"text-align: center;\">Bienvenido Administrador!</h1>");                   
-                            out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaAdmin.jsp'>\n");
-                            out.println("<p style=\"text-align: center;\"> Espere unos instantes, será redirigido...</p>\n");
-                            out.println("</div>");
-                            out.println("</body>");
-                            out.println("</html>");
+                        HttpSession session = request.getSession(true);
+                        session.setAttribute("nombreUsuario", usuario);
+                        //Validar credenciales para admin
+                        if (rs.getString(1).equals("admin") && rs.getString(2).equals("1234")){
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");                       
+                                out.println("</head>");
+                                out.println("<body style=\"background-image:url('imgs/fondo_generico.jpg'); background-position: center;\">"); 
+                                out.println("<div style=\"margin-left: 25%; margin-top: 25%; margin-right: 25%; border-style: double; border-radius: 20px\" >");
+                                out.println("<h1 style=\"text-align: center;\">Bienvenido Administrador!</h1>");                   
+                                out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaAdmin.jsp'>\n");
+                                out.println("<p style=\"text-align: center;\"> Espere unos instantes, será redirigido...</p>\n");
+                                out.println("</div>");
+                                out.println("</body>");
+                                out.println("</html>");
+                            //Validar credenciales usuario
                         }else{
-                            out.println("<!DOCTYPE html>");
-                            out.println("<html>");
-                            out.println("<head>");                       
-                            out.println("</head>");
-                            out.println("<body style=\"background-image:url('imgs/fondo_generico.jpg'); background-position: center;\">"); 
-                            out.println("<div style=\"margin-left: 25%; margin-top: 25%; margin-right: 25%; border-style: double; border-radius: 20px;\" >"); //align=\"center\"
-                            out.println("<h1 style=\"text-align: center;\" > Bienvenido "+ usuario + "!</h1>");
-                            out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaPrincipalUsuario.jsp'>\n");
-                            out.println("<p style=\"text-align: center;\"> Espere por favor, será redireccionado en 5 segundos...</p>\n");
-                            out.println("</div>");
-                            out.println("</body>");
-                            out.println("</html>");
-                        }
+                                out.println("<!DOCTYPE html>");
+                                out.println("<html>");
+                                out.println("<head>");                       
+                                out.println("</head>");
+                                out.println("<body style=\"background-image:url('imgs/fondo_generico.jpg'); background-position: center;\">"); 
+                                out.println("<div style=\"margin-left: 25%; margin-top: 25%; margin-right: 25%; border-style: double; border-radius: 20px;\" >"); //align=\"center\"
+                                out.println("<h1 style=\"text-align: center;\" > Bienvenido "+ usuario + "!</h1>");
+                                out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaPrincipalUsuario.jsp'>\n");
+                                out.println("<p style=\"text-align: center;\"> Espere por favor, será redireccionado en 5 segundos...</p>\n");
+                                out.println("</div>");
+                                out.println("</body>");
+                                out.println("</html>");
+                       }
+                //Si no hay alguna coincidencia, mostrar pagina error
                 } else{
                         out.println("<!DOCTYPE html>");
                         out.println("<html>");
@@ -109,11 +112,11 @@ public class ServletManejoLogueoUsuario2 extends HttpServlet {
                         out.println("</html>");
                   }
 
-                //Cerrar flujo
+                //Cerrar flujo Statement
                 stmnt.close();          
             
-        }catch (ClassNotFoundException | SQLException ex) {
-            //Caso de que usuario no exista o que un dato este incorrecto, imprimir mensaje fallido y reenviar a JSP de logueo usuario
+        //Captura de cualquier otro error (Conexion BDs, etc)
+        }catch (ClassNotFoundException | SQLException ex) {            
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -122,8 +125,7 @@ public class ServletManejoLogueoUsuario2 extends HttpServlet {
             out.println("<body style=\"background-image:url('imgs/fondo_error_1.png'); background-position: center;\">"); 
             out.println("<div style=\"margin: 25% auto; border-style: double; border-radius: 20px;\" >");
             out.println("<h1 style=\"text-align: center;\">Error en la conexión! No se pudo comunicar con el servidor...</h1>");
-            //out.println("<h2 style=\"text-align: center;\">" + ex.toString() + "</h2>");            
-            //REDIRIJO A PAGINA LOGUEO
+            out.println("<h2 style=\"text-align: center;\">Detalles: " + ex.toString() + "</h2>");            
             out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaLogueoUsuario.jsp'>\n");
             out.println("<p style=\"text-align: center;\"> Será redirigido en 5 segundos...</p>\n");
             out.println("</div>");

@@ -37,17 +37,25 @@ public class ServletManejarOpcionesUsuario extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, ClassNotFoundException {
+        
+        //Setear cómo va a ser el tipo de respuesta del servlet
         response.setContentType("text/html;charset=UTF-8");
+        
+        //Obtener el parametro accion de la solicitud
         String eleccionAdmin = request.getParameter("accion"); 
-        try (PrintWriter out = response.getWriter()) {
-            /*Inicializar variables */
+        
+        /*Inicializar variables */
             String mensajeResultado = "Base de datos actualizada...";
             String urlDB = "jdbc:mysql://localhost:3306/farmaciaOnline?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
             String usuarioDB = "root";
             String psswdDB = "";
             String driverDB = "com.mysql.cj.jdbc.Driver";
+            
             /* Paso4) Conexión a la base de datos */
             Connection conexionDB = null;
+            
+        try (PrintWriter out = response.getWriter()) {                 
+            
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -58,59 +66,65 @@ public class ServletManejarOpcionesUsuario extends HttpServlet {
             
             Class.forName(driverDB);
             conexionDB = DriverManager.getConnection(urlDB, usuarioDB, psswdDB);
-            //cada case corresponde al 'value de cada Option de los Selects'
+            
+            //swichear la eleccion 
             switch (eleccionAdmin) {
                 case ("verCompras"): 
                     //out.println("<h1>1</h1>"); 
-                        try {        
-                        HttpSession session = request.getSession();
-                        //out.println("<h1>2</h1>"); 
-                        //session.setAttribute("nombreUsuario", usuario);
-                        /*Creación de SQL Statement */
-                        PreparedStatement stmnt9 = conexionDB.prepareStatement("SELECT producto, monto, fechaHora FROM ventas WHERE usuario = ?");
-                        //out.println(session.getAttribute("nombreUsuario").toString()); 
-                        String usuario = session.getAttribute("nombreUsuario").toString();
-                        stmnt9.setString(1, usuario);
-                        //out.println("<h1>3</h1>"); 
-                        //Ejecutar Consulta                     
-                        ResultSet rs9 = stmnt9.executeQuery();   
-                        //out.println("<h1>4</h1>"); 
-                        //Si hay algo en el result set
-                        if(rs9.next()){   
-                            //out.println("<h1>5</h1>");                            
-                            //Este RS lo seteamos como attributo de este Servlet
-                            request.setAttribute("rsResultadoMisCompras", rs9);
-                            //out.println("<h1>5</h1>");
-//                          //Creamos un RD para enviar este RS a la pagina  de muestra de la tabla
-                            RequestDispatcher rd = request.getRequestDispatcher("paginaConsultarMisComprasUsuario.jsp");
-                            //out.println("<h1>6</h1>");    
-                            rd.forward(request, response);
-                            //Cerrar flujos                         
-                            stmnt9.close();
-                            rs9.close();
-                        }
-                        //si no hay nada en rs
-                        else{
-                            //EMITO MENSAJE ERROR Y REDIRIJO A PAGINA PRINCIPAL USUARIO
-                            out.println("<h2>Todavia no ha realiza compra alguna :( ...</h2>");
-                            out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaPrincipalUsuario.jsp'>\n");
-                            out.println("<p> Será redirigido en 5 segundos...</p>\n");
-                        }                        
+                        try {     
+                            //Recuperar Sesión
+                            HttpSession session = request.getSession();
+                            //Recuperar nombre de usuario de la sesión
+                            String usuario = session.getAttribute("nombreUsuario").toString();
+                            
+                            /*Creación de SQL Statement */
+                            PreparedStatement stmnt9 = conexionDB.prepareStatement("SELECT producto, monto, fechaHora FROM ventas WHERE usuario = ?");
+                            stmnt9.setString(1, usuario);
+                           
+                            //Ejecutar Consulta                     
+                            ResultSet rs9 = stmnt9.executeQuery();   
+                            
+                            //Si hay algo en el result set
+                            if( rs9.next() ){   
+                                                        
+                                //Este RS lo seteamos como attributo de la solicitud
+                                request.setAttribute("rsResultadoMisCompras", rs9);
+                               
+    //                          //Creamos un RD para enviar este RS a la pagina  de muestra de la tabla
+                                RequestDispatcher rd = request.getRequestDispatcher("paginaConsultarMisComprasUsuario.jsp");
+                               
+                                //Enviar desde Servlet Actual la solicitud y la respuesta a 'paginaConsultarMisComprasUsuario.jsp'
+                                rd.forward(request, response);
+                                
+                                //Cerrar flujos                         
+                                stmnt9.close();
+                                rs9.close();
+                            }
+                            //si no hay nada en rs
+                            else{
+                                //EMITO MENSAJE ERROR Y REDIRIJO A PAGINA PRINCIPAL USUARIO
+                                out.println("<h2>Todavia no ha realiza compra alguna :( ...</h2>");
+                                out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaPrincipalUsuario.jsp'>\n");
+                                out.println("<p> Será redirigido en 5 segundos...</p>\n");
+                            }                        
 
-                    } catch (Exception ex) {
-                        //EMITO MENSAJE ERROR Y REDIRIJO A PAGINA PRINCIPAL USUARIO
-                        out.println("<h1>Ha ocurrido un error la Consulta!</h1>");
-                        out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaPrincipalUsuario.jsp'>\n");
-                        out.println("<p> Será redirigido a pagina Admin en 5 segundos...</p>\n");
-                    }
+                        } catch (IOException | SQLException | ServletException ex) {
+                            //EMITO MENSAJE ERROR Y REDIRIJO A PAGINA PRINCIPAL USUARIO
+                            out.println("<h1>Ha ocurrido un error la Consulta!</h1>");
+                            out.println("<meta http-equiv='Refresh' content='5; url=/AplicacionWebFarmaciaAyza/paginaPrincipalUsuario.jsp'>\n");
+                            out.println("<p> Será redirigido a pagina Admin en 5 segundos...</p>\n");
+                        }
                     //response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaConsultarMisComprasUsuario.jsp");
                     break;
+                    
                 case ("buscarProducto"): 
                     response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaConsultaProducto.jsp");
                     break;   
+                    
                 case ("0"):
                     response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaPrincipalUsuario.jsp");
                     break;
+                    
                 default:
                     response.sendRedirect("/AplicacionWebFarmaciaAyza/paginaPrincipalUsuario.jsp");
                     break;                   

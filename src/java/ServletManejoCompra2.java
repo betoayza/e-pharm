@@ -39,7 +39,9 @@ public class ServletManejoCompra2 extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            
             response.setContentType("text/html;charset=UTF-8");
+            
             /*Inicializar variables */           
             String urlDB = "jdbc:mysql://localhost:3306/farmaciaOnline?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
             String usuarioDB = "root";
@@ -48,8 +50,7 @@ public class ServletManejoCompra2 extends HttpServlet {
             /* Conexión a la base de datos */
             Connection conexionDB = null;
 
-        try (PrintWriter out = response.getWriter()) {
-                 
+        try (PrintWriter out = response.getWriter()) {                 
             
                 //conectar a BD
                 Class.forName(driverDB);
@@ -126,9 +127,12 @@ public class ServletManejoCompra2 extends HttpServlet {
                             RequestDispatcher rd = request.getRequestDispatcher("paginaMostrarCompraProducto.jsp");
                             rd.forward(request, response);                            
                         }
-                    }//Caso contrario: no hay disponibilidad o no existe
+                    }
+                    //Caso contrario: 
+                        //1) no hay disponibilidad o 
+                        //2) no existe
                     else{
-                            //no hay disponibilidad
+                            //1) No hay disponibilidad
                             if (stockProducto <= 0) {
                                 out.println("<!DOCTYPE html>");
                                 out.println("<html>");
@@ -144,9 +148,10 @@ public class ServletManejoCompra2 extends HttpServlet {
                                 out.println("</div>");
                                 out.println("</body>");
                                 out.println("</html>");
-                            }//caso ultimo: la no existencia del producto
-                            //En realidad no hace falta, porque el sistema muestra en la busqueda
-                            //solo productos existentes en la BDs
+                            }
+                            //caso ultimo: la no existencia del producto
+                                //En realidad no hace falta, porque el sistema muestra en la busqueda
+                                //solo productos existentes en la BDs
                             else{
                                 out.println("<!DOCTYPE html>");
                                 out.println("<html>");
@@ -166,6 +171,8 @@ public class ServletManejoCompra2 extends HttpServlet {
                     }                    
                     //cerrar flujo del stament de busqueda del producto
                     stmnt.close();
+        //Captura de cualquier otro tipo de error relacionado con el Servlet:
+        //Error de conexion con BD, etc
         } catch (IOException | ClassNotFoundException | NumberFormatException | SQLException | ServletException error) {
                             out.println("<!DOCTYPE html>");
                             out.println("<html>");
